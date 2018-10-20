@@ -20,6 +20,10 @@ class ViewController: UIViewController {
     var net = NetworkLayer()
     var lastDate: Date? = nil
     var sleepState = SleepState.asleep
+    
+    
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -41,18 +45,10 @@ class ViewController: UIViewController {
 //        t.schedule(deadline: .now(), repeating: 10.0)
 //        t.setEventHandler(handler: {[weak self] in self!.updateData()})
         
-        let timer = Timer.scheduledTimer(timeInterval: 5.0, target: self, selector: #selector(updateData), userInfo: nil, repeats: true)
+        // let timer = Timer.scheduledTimer(timeInterval: 5.0, target: self, selector: #selector(updateData), userInfo: nil, repeats: true)
     }
     
     @objc func updateData() {
-        var category:HKCategoryValueSleepAnalysis
-        if sleepState == .awake {
-            category = .asleep
-        } else {
-            category = .awake
-        }
-        saveSleepAnalysis(category: category)
-        saveSleepAnalysis(category: category)
         retrieveSleepAnalysis()
     }
     
@@ -62,7 +58,7 @@ class ViewController: UIViewController {
         if let sleepType = HKObjectType.categoryType(forIdentifier: HKCategoryTypeIdentifier.sleepAnalysis) {
             
             // Use a sortDescriptor to get the recent data first
-            let sortDescriptor = NSSortDescriptor(key: HKSampleSortIdentifierEndDate, ascending: false)
+            // let sortDescriptor = NSSortDescriptor(key: HKSampleSortIdentifierEndDate, ascending: false)
             
             // we create our query with a block completion to execute
             let sorter = NSSortDescriptor(key: "startDate", ascending: false)
