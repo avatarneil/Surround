@@ -10,15 +10,15 @@ import UIKit
 import HealthKit
 import Foundation
 
-struct SleepState {
-    var lastUpdated: Date
-    var state: String
+enum SleepState: String {
+    case asleep = "asleep"
+    case awake = "awake"
 }
 
 class ViewController: UIViewController {
     let healthStore = HKHealthStore()
     var net = NetworkLayer()
-    var sleepState = SleepState(lastUpdated: Date(), state: "Asleep")
+    var sleepState = SleepState.awake
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -66,12 +66,13 @@ class ViewController: UIViewController {
                     // do something with my data
                     for item in result {
                         if let sample = item as? HKCategorySample {
-                            let value = (sample.value == HKCategoryValueSleepAnalysis.asleep.rawValue || sample.value == HKCategoryValueSleepAnalysis.inBed.rawValue) ? "Asleep" : "Awake"
+                            let value = (sample.value == HKCategoryValueSleepAnalysis.asleep.rawValue || sample.value == HKCategoryValueSleepAnalysis.inBed.rawValue) ? SleepState.asleep : SleepState.awake
                             print("Sleep loop")
-                            if ((sample.startDate ... sample.endDate).contains(Date()) && self.sleepState.state != value) {
+                            var now = Date()
+                            if ((sample.startDate ... sample.endDate).contains(Calendar.current.date(byAdding: .minute, value: -5, to: now) ?? now) && self.sleepState != value) {
                                 print("Healthkit sleep: \(sample.startDate) \(sample.endDate) - value: \(value)")
-                                self.sleepState.state = value;
-                                self.net.httpPost(type: "sleep", state: value)
+                                self.sleepState = value;
+                                self.net.httpPost(type: "sleep", state: self.sleepState.rawValue)
                             }
                         }
                     }

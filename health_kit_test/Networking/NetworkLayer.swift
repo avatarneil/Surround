@@ -25,7 +25,7 @@ class NetworkLayer {
         
     }
     
-    // HTTP POST to send sleep data via HealthyHomeAPI
+    // HTTP POST to send sleep data via HousemateAPI
     func httpPost(type: String, state: String) {
         let parameters: Parameters = [
             "apikey": API_KEY,
