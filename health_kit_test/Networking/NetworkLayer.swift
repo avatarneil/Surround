@@ -9,6 +9,8 @@
 import Foundation
 import Alamofire
 
+let API_KEY = "1234"
+
 let parameters: Parameters = [
     "apikey": "1234",
     "type" : "",
@@ -24,7 +26,12 @@ class NetworkLayer {
     }
     
     // HTTP POST to send sleep data via HealthyHomeAPI
-    func sendSleepData() {
+    func httpPost(type: String, state: String) {
+        let parameters: Parameters = [
+            "apikey": API_KEY,
+            "type" : type,
+            "state" : state
+        ]
         Alamofire.request(URL + "/sendSleep", method: .post, parameters: parameters) .responseJSON { response in
             print(response.request)  // original URL request
             print(response.response) // URL response
