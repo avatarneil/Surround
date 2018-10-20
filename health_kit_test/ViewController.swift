@@ -8,10 +8,17 @@
 
 import UIKit
 import HealthKit
+import Foundation
+
+enum SleepState: String {
+    case asleep = "asleep"
+    case awake = "awake"
+}
 
 class ViewController: UIViewController {
     let healthStore = HKHealthStore()
-
+    var net = NetworkLayer()
+    var sleepState = SleepState.awake
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -29,9 +36,13 @@ class ViewController: UIViewController {
             }
         }
         
-        retrieveSleepAnalysis();
+        let timer = Timer.scheduledTimer(timeInterval: 30.0, target: self, selector: #selector(updateData), userInfo: nil, repeats: true)
     }
-
+    
+    @objc func updateData() {
+        retrieveSleepAnalysis()
+    }
+    
     func retrieveSleepAnalysis() {
         
         // first, we define the object type we want
@@ -41,7 +52,7 @@ class ViewController: UIViewController {
             let sortDescriptor = NSSortDescriptor(key: HKSampleSortIdentifierEndDate, ascending: false)
             
             // we create our query with a block completion to execute
-            let query = HKSampleQuery(sampleType: sleepType, predicate: nil, limit: 30, sortDescriptors: [sortDescriptor]) { (query, tmpResult, error) -> Void in
+            let query = HKSampleQuery(sampleType: sleepType, predicate: nil, limit: 1, sortDescriptors: [sortDescriptor]) { (query, tmpResult, error) -> Void in
                 
                 if error != nil {
                     
@@ -55,8 +66,14 @@ class ViewController: UIViewController {
                     // do something with my data
                     for item in result {
                         if let sample = item as? HKCategorySample {
-                            let value = (sample.value == HKCategoryValueSleepAnalysis.inBed.rawValue) ? "InBed" : "Asleep"
-                            print("Healthkit sleep: \(sample.startDate) \(sample.endDate) - value: \(value)")
+                            let value = (sample.value == HKCategoryValueSleepAnalysis.asleep.rawValue || sample.value == HKCategoryValueSleepAnalysis.inBed.rawValue) ? SleepState.asleep : SleepState.awake
+                            print("Sleep loop")
+                            var now = Date()
+                            if ((sample.startDate ... sample.endDate).contains(Calendar.current.date(byAdding: .minute, value: -5, to: now) ?? now) && self.sleepState != value) {
+                                print("Healthkit sleep: \(sample.startDate) \(sample.endDate) - value: \(value)")
+                                self.sleepState = value;
+                                self.net.httpPost(type: "sleep", state: self.sleepState.rawValue)
+                            }
                         }
                     }
                 }
