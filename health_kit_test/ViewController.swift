@@ -66,9 +66,10 @@ class ViewController: UIViewController {
                     // do something with my data
                     for item in result {
                         if let sample = item as? HKCategorySample {
-                            let value = (sample.value == HKCategoryValueSleepAnalysis.asleep.rawValue) ? "Asleep" : "Awake"
-                            print("Healthkit sleep: \(sample.startDate) \(sample.endDate) - value: \(value)")
-                            if (self.sleepState.state != value) {
+                            let value = (sample.value == HKCategoryValueSleepAnalysis.asleep.rawValue || sample.value == HKCategoryValueSleepAnalysis.inBed.rawValue) ? "Asleep" : "Awake"
+                            print("Sleep loop")
+                            if ((sample.startDate ... sample.endDate).contains(Date()) && self.sleepState.state != value) {
+                                print("Healthkit sleep: \(sample.startDate) \(sample.endDate) - value: \(value)")
                                 self.sleepState.state = value;
                                 self.net.httpPost(type: "sleep", state: value)
                             }
