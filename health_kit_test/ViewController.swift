@@ -18,7 +18,7 @@ struct SleepState {
 class ViewController: UIViewController {
     let healthStore = HKHealthStore()
     var net = NetworkLayer()
-    var sleepState = SleepState(lastUpdated: Date(), state: "Awake")
+    var sleepState = SleepState(lastUpdated: Date(), state: "Asleep")
     override func viewDidLoad() {
         super.viewDidLoad()
         
