@@ -36,7 +36,7 @@ class ViewController: UIViewController {
             }
         }
         
-        let timer = Timer.scheduledTimer(timeInterval: 10.0, target: self, selector: #selector(updateData), userInfo: nil, repeats: true)
+        let timer = Timer.scheduledTimer(timeInterval: 30.0, target: self, selector: #selector(updateData), userInfo: nil, repeats: true)
     }
     
     @objc func updateData() {
@@ -69,7 +69,8 @@ class ViewController: UIViewController {
                             let value = (sample.value == HKCategoryValueSleepAnalysis.asleep.rawValue) ? "Asleep" : "Awake"
                             print("Healthkit sleep: \(sample.startDate) \(sample.endDate) - value: \(value)")
                             if (self.sleepState.state != value) {
-                                self.net.sendSleepData()
+                                self.sleepState.state = value;
+                                self.net.httpPost(type: "sleep", state: value)
                             }
                         }
                     }
