@@ -8,6 +8,7 @@
 
 import Foundation
 import Alamofire
+import SwiftyJSON
 
 let API_KEY = "b8fcc390-939b-4089-8df6-6287e84d0580"
 
@@ -34,7 +35,8 @@ class NetworkLayer {
             "type" : type,
             "state" : state
         ]
-        Alamofire.request(STATUS_URL + "/sendSleep", method: .post, parameters: parameters, encoding: JSONEncoding.default) .responseJSON { response in
+        Alamofire.request(STATUS_URL + "/sendSleep", method: .post, parameters: parameters, encoding: JSONEncoding.default) .responseJSON {
+            response in
             print(response.request)
             if let JSON = response.result.value {
                 print("JSON: \(JSON)")
@@ -46,10 +48,13 @@ class NetworkLayer {
         let parameters: Parameters = [
             "accesscode": input
         ]
-        Alamofire.request(REG_URL, method: .post, parameters: parameters, encoding: JSONEncoding.default) .responseJSON
-            { response in
-            if let JSON = response.result.value {
-                print("JSON: \(JSON)")
+        Alamofire.request(REG_URL, method: .post, parameters: parameters, encoding: JSONEncoding.default) .responseJSON {
+            response in
+            if let jsonResponse = response.result.value {
+                print("JSON: \(jsonResponse)")
+                let jsonify = JSON(jsonResponse)
+                // TODO: Error handle no access key
+                UserDefaults.standard.set(jsonify["apikey"].stringValue, forKey: "apikey")
             }
         }
     }

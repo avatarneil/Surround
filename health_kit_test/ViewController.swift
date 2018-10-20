@@ -22,7 +22,6 @@ class ViewController: UIViewController {
     var sleepState = SleepState.asleep
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         let typestoRead = Set([
             HKObjectType.categoryType(forIdentifier: HKCategoryTypeIdentifier.sleepAnalysis)!
             ])
@@ -44,10 +43,6 @@ class ViewController: UIViewController {
         let timer = Timer.scheduledTimer(timeInterval: 5.0, target: self, selector: #selector(updateData), userInfo: nil, repeats: true)
     }
     
-    @IBOutlet weak var textf: UITextField!
-    @IBAction func submitAccessCode(_ sender: Any) {
-        print(textf.text)
-    }
     @objc func updateData() {
         var category:HKCategoryValueSleepAnalysis
         if sleepState == .awake {
