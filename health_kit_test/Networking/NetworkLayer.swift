@@ -1,0 +1,53 @@
+//
+//  NetworkLayer.swift
+//  health_kit_test
+//
+//  Created by Neil Goldader on 10/19/18.
+//  Copyright © 2018 Neil Goldader. All rights reserved.
+//
+
+import Foundation
+import Alamofire
+
+let parameters: Parameters = [
+    "apikey": "1234",
+    "type" : "",
+    "state" : ""
+]
+
+let URL = "foo.wix.com/api"
+
+class NetworkLayer {
+    
+    init() {
+        
+    }
+    
+    // HTTP POST to send sleep data via HealthyHomeAPI
+    func sendSleepData() {
+        Alamofire.request(URL + "/sendSleep", method: .post, parameters: parameters) .responseJSON { response in
+            print(response.request)  // original URL request
+            print(response.response) // URL response
+            print(response.data)     // server data
+            print(response.result)   // result of response serialization
+            
+            if let JSON = response.result.value {
+                print("JSON: \(JSON)")
+            }
+        }
+    }
+    
+    // Request changes made to config
+    func getConfigChanges() {
+        Alamofire.request(URL + "/getConfig", method: .get, parameters: parameters) .responseJSON { response in
+            print(response.request)  // original URL request
+            print(response.response) // URL response
+            print(response.data)     // server data
+            print(response.result)   // result of response serialization
+            
+            if let JSON = response.result.value {
+                print("JSON: \(JSON)")
+            }
+        }
+    }
+}
