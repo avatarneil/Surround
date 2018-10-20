@@ -27,8 +27,10 @@ class ViewController: UIViewController {
             if success == false {
                 NSLog(" Display not allowed")
             }
+        }
+        
+        retrieveSleepAnalysis();
     }
-}
 
     func retrieveSleepAnalysis() {
         
@@ -63,5 +65,53 @@ class ViewController: UIViewController {
             // finally, we execute our query
             healthStore.execute(query)
         }
+    }
+    
+    func saveSleepAnalysis() {
+        
+        var alarmTime: Date!
+        var endTime: Date!
+        // alarmTime and endTime are NSDate objects
+        if let sleepType = HKObjectType.categoryType(forIdentifier: HKCategoryTypeIdentifier.sleepAnalysis) {
+            
+            // we create our new object we want to push in Health app
+            let object = HKCategorySample(type:sleepType, value: HKCategoryValueSleepAnalysis.inBed.rawValue, start: alarmTime, end: endTime)
+            
+            // at the end, we save it
+            healthStore.save(object, withCompletion: { (success, error) -> Void in
+                
+                if error != nil {
+                    // something happened
+                    return
+                }
+                
+                if success {
+                    print("My new data was saved in HealthKit")
+                    
+                } else {
+                    // something happened again
+                }
+                
+            })
+            
+            
+            let object2 = HKCategorySample(type:sleepType, value: HKCategoryValueSleepAnalysis.asleep.rawValue, start: alarmTime, end: endTime)
+            
+            healthStore.save(object2, withCompletion: { (success, error) -> Void in
+                if error != nil {
+                    // something happened
+                    return
+                }
+                
+                if success {
+                    print("My new data (2) was saved in HealthKit")
+                } else {
+                    // something happened again
+                }
+                
+            })
+            
+        }
+        
     }
 }
