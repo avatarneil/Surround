@@ -32,14 +32,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
         if let vc = self.window?.rootViewController as? ViewController {
             vc.healthStore.execute(query)
-//            vc.healthStore.enableBackgroundDelivery(for: sampleType!, frequency: HKUpdateFrequency.immediate, withCompletion: {(success, error) -> Void in
-//                if error != nil {
-//                    return
-//                }
-//                if (success) {
-//                    vc.updateData()
-//                }
-//            })
+            vc.healthStore.enableBackgroundDelivery(for: sampleType!, frequency: HKUpdateFrequency.immediate, withCompletion: {(success, error) -> Void in
+                if error != nil {
+                    return
+                }
+                if (success) {
+                    vc.updateData()
+                }
+            })
         }
         
         return true
