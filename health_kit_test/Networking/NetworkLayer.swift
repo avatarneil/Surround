@@ -17,7 +17,9 @@ let parameters: [String: Any] = [
     "state" : ""
 ]
 
-let URL = "https://ballori2.wixsite.com/mysite/_functions/sendStatus"
+let REG_URL = "https://ballori2.wixsite.com/mysite/_functions/register"
+
+let STATUS_URL = "https://ballori2.wixsite.com/mysite/_functions/sendStatus"
 
 class NetworkLayer {
     
@@ -26,14 +28,26 @@ class NetworkLayer {
     }
     
     // HTTP POST to send sleep data via HousemateAPI
-    func httpPost(type: String, state: String) {
+    func httpPostSleep(type: String, state: String) {
         let parameters: Parameters = [
             "api": API_KEY,
             "type" : type,
             "state" : state
         ]
-        Alamofire.request(URL + "/sendSleep", method: .post, parameters: parameters, encoding: JSONEncoding.default) .responseJSON { response in
+        Alamofire.request(STATUS_URL + "/sendSleep", method: .post, parameters: parameters, encoding: JSONEncoding.default) .responseJSON { response in
             print(response.request)
+            if let JSON = response.result.value {
+                print("JSON: \(JSON)")
+            }
+        }
+    }
+    
+    func httpPostRegister(input: String) {
+        let parameters: Parameters = [
+            "accesscode": input
+        ]
+        Alamofire.request(REG_URL, method: .post, parameters: parameters, encoding: JSONEncoding.default) .responseJSON
+            { response in
             if let JSON = response.result.value {
                 print("JSON: \(JSON)")
             }
@@ -42,7 +56,7 @@ class NetworkLayer {
     
     // Request changes made to config
     func getConfigChanges() {
-        Alamofire.request(URL + "/getConfig", method: .get, parameters: parameters) .responseJSON { response in
+        Alamofire.request(STATUS_URL + "/getConfig", method: .get, parameters: parameters) .responseJSON { response in
             print(response.request)  // original URL request
             print(response.response) // URL response
             print(response.data)     // server data
