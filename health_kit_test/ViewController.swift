@@ -69,10 +69,16 @@ class ViewController: UIViewController {
                             let value = (sample.value == HKCategoryValueSleepAnalysis.asleep.rawValue || sample.value == HKCategoryValueSleepAnalysis.inBed.rawValue) ? SleepState.asleep : SleepState.awake
                             print("Sleep loop")
                             var now = Date()
-                            if ((sample.startDate ... sample.endDate).contains(Calendar.current.date(byAdding: .minute, value: -5, to: now) ?? now) && self.sleepState != value) {
-                                print("Healthkit sleep: \(sample.startDate) \(sample.endDate) - value: \(value)")
-                                self.sleepState = value;
-                                self.net.httpPost(type: "sleep", state: self.sleepState.rawValue)
+                            if (sample.startDate ... sample.endDate).contains(Calendar.current.date(byAdding: .minute, value: -5, to: now) ?? now) {
+                                if (self.sleepState != value) {
+                                    print("Healthkit sleep: \(sample.startDate) \(sample.endDate) - value: \(value)")
+                                    self.sleepState = value;
+                                    self.net.httpPost(type: "sleep", state: self.sleepState.rawValue)
+                                } else {
+                                    print("No change in sleepState")
+                                }
+                            } else {
+                                self.sleepState = .awake // we asssume awakeness as a base state
                             }
                         }
                     }

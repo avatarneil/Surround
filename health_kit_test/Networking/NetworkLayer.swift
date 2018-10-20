@@ -9,7 +9,7 @@
 import Foundation
 import Alamofire
 
-let API_KEY = "1234"
+let API_KEY = "b8fcc390-939b-4089-8df6-6287e84d0580"
 
 let parameters: [String: Any] = [
     "apikey": "1234",
@@ -28,11 +28,12 @@ class NetworkLayer {
     // HTTP POST to send sleep data via HousemateAPI
     func httpPost(type: String, state: String) {
         let parameters: Parameters = [
-            "apikey": API_KEY,
+            "api": API_KEY,
             "type" : type,
             "state" : state
         ]
         Alamofire.request(URL + "/sendSleep", method: .post, parameters: parameters, encoding: JSONEncoding.default) .responseJSON { response in
+            print(response.request)
             if let JSON = response.result.value {
                 print("JSON: \(JSON)")
             }
