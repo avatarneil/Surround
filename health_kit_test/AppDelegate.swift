@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import HealthKit
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -16,8 +17,40 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        // UIApplication.shared.setMinimumBackgroundFetchInterval(UIApplication.backgroundFetchIntervalMinimum)
+        let sampleType = HKObjectType.categoryType(forIdentifier: HKCategoryTypeIdentifier.sleepAnalysis)
+        
+        let query = HKObserverQuery(sampleType: sampleType!, predicate: nil) {query, completionHandler, error in
+            if error != nil {
+                return
+            }
+            DispatchQueue.main.async {
+            if let vc = self.window?.rootViewController as? ViewController {
+                vc.updateData()
+                }}
+            completionHandler()
+        }
+        if let vc = self.window?.rootViewController as? ViewController {
+            vc.healthStore.execute(query)
+            vc.healthStore.enableBackgroundDelivery(for: sampleType!, frequency: HKUpdateFrequency.immediate, withCompletion: {(success, error) -> Void in
+                if error != nil {
+                    return
+                }
+                if (success) {
+                    vc.updateData()
+                }
+            })
+        }
+        
         return true
     }
+    
+//    func application(_ application: UIApplication, performFetchWithCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
+//        if let vc = window?.rootViewController as? ViewController {
+//            vc.updateData()
+//        }
+//        completionHandler(.failed)
+//    }
 
     func applicationWillResignActive(_ application: UIApplication) {
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
