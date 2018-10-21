@@ -20,7 +20,7 @@ class ViewController: UIViewController {
     var net = NetworkLayer()
     var lastDate: Date? = nil
     var sleepState = SleepState.asleep
-    var sleepStateTog = SleepState.awake
+    var sleepStateTog = SleepState.asleep
     
     override func viewDidLoad() {
         super.viewDidLoad()

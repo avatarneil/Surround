@@ -35,6 +35,23 @@ class NetworkLayer {
             "type" : type,
             "state" : state
         ]
+        // curl -X POST https://maker.ifttt.com/trigger/{event}/with/key/xXcGaXwFGn_tGn0Wxp_tc
+        print(state)
+        if (state == "asleep") {
+            print(UserDefaults.standard.string(forKey: "webhookKey"))
+            Alamofire.request("https://maker.ifttt.com/trigger/sleep/with/key/" + (UserDefaults.standard.string(forKey: "webhookKey") ?? "foo"), method: .get) .responseString {
+                response in
+                print(response)
+            }
+        } else {
+            print(UserDefaults.standard.string(forKey: "webhookKey"))
+            Alamofire.request("https://maker.ifttt.com/trigger/awake/with/key/" + (UserDefaults.standard.string(forKey: "webhookKey") ?? "foo"), method: .get) .responseString{
+                response in
+                print(response)
+            }
+        }
+        
+        
         Alamofire.request(STATUS_URL + "/sendSleep", method: .post, parameters: parameters, encoding: JSONEncoding.default) .responseJSON {
             response in
             print(response.request)

@@ -27,9 +27,9 @@ class LaunchViewController: UIViewController {
     
     override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
         if (identifier == "gotoMain") {
-            if (UserDefaults.standard.object(forKey: "apikey") == nil) {
-                print("No API Key Found, please register.")
-                let alert = UIAlertController(title: "Error: No API Key", message: "No API Key found, please complete registration.", preferredStyle: .alert)
+            if (UserDefaults.standard.object(forKey: "apikey") == nil && UserDefaults.standard.object(forKey: "webhookKey") == nil) {
+                print("No API Keys Found")
+                let alert = UIAlertController(title: "Error: No API Keys", message: "No Surround or IFTTT Webhook API Keys found, please complete registration, or manually configure your IFTTT webhook.", preferredStyle: .alert)
                 
                 alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
                 
