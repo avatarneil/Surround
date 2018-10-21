@@ -180,6 +180,7 @@
                             <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="d5p-ZY-viN">
                                 <rect key="frame" x="20" y="616" width="49" height="31"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="onTintColor" red="0.39386966540000001" green="0.1214474598" blue="0.69751862050000002" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                 <connections>
                                     <action selector="sleepToggle:" destination="a5p-mF-zed" eventType="valueChanged" id="ye3-He-ODZ"/>
                                 </connections>
