@@ -21,9 +21,6 @@ class ViewController: UIViewController {
     var lastDate: Date? = nil
     var sleepState = SleepState.asleep
     
-    
-    
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         let typestoRead = Set([
@@ -37,14 +34,19 @@ class ViewController: UIViewController {
         self.healthStore.requestAuthorization(toShare: typestoShare, read: typestoRead) { (success, error) -> Void in
             if success == false {
                 NSLog(" Display not allowed")
+            } else {
+                if (UserDefaults.standard.object(forKey: "configured") == nil) {
+                    print("executing initial configuration...")
+                    self.saveSleepAnalysis(category: HKCategoryValueSleepAnalysis.awake)
+                    UserDefaults.standard.set(true, forKey: "configured")
+                }
             }
         }
-        
 //        let t = DispatchSource.makeTimerSource()
 //        t.schedule(deadline: .now(), repeating: 10.0)
 //        t.setEventHandler(handler: {[weak self] in self!.updateData()})
         
-        // let timer = Timer.scheduledTimer(timeInterval: 5.0, target: self, selector: #selector(updateData), userInfo: nil, repeats: true)
+        let timer = Timer.scheduledTimer(timeInterval: 5.0, target: self, selector: #selector(updateData), userInfo: nil, repeats: true)
     }
     
     @objc func updateData() {

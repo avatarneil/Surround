@@ -10,10 +10,10 @@ import Foundation
 import Alamofire
 import SwiftyJSON
 
-let API_KEY = "b8fcc390-939b-4089-8df6-6287e84d0580"
+let API_KEY = UserDefaults.standard.object(forKey: "apikey")
 
 let parameters: [String: Any] = [
-    "apikey": "1234",
+    "apikey": UserDefaults.standard.object(forKey: "apikey"),
     "type" : "",
     "state" : ""
 ]
@@ -44,7 +44,7 @@ class NetworkLayer {
         }
     }
     
-    func httpPostRegister(input: String) {
+    func httpPostRegister(input: String, onSuccess: @escaping (Bool) -> Void) {
         let parameters: Parameters = [
             "accesscode": input
         ]
@@ -54,7 +54,12 @@ class NetworkLayer {
                 print("JSON: \(jsonResponse)")
                 let jsonify = JSON(jsonResponse)
                 // TODO: Error handle no access key
-                UserDefaults.standard.set(jsonify["apikey"].stringValue, forKey: "apikey")
+                let status = (jsonify["status"] == "success") ? true : false
+                if (status) {
+                    print("Writing APIKEY to memory: " + jsonify["apikey"].stringValue)
+                    UserDefaults.standard.set(jsonify["apikey"].stringValue, forKey: "apikey")
+                }
+                onSuccess(status)
             }
         }
     }

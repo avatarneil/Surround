@@ -19,9 +19,27 @@ class LoginViewController: UIViewController {
     
 
     @IBOutlet weak var textf: UITextField!
-    @IBAction func submitAccessCode(_ sender: Any) {
-        print(textf.text)
-        net.httpPostRegister(input: textf.text ?? "0000")
+    @IBAction func submitAccessCode(_ sender: UIButton) {
+        // print(textf.text)
+        if (sender.tag == 0) {
+            net.httpPostRegister(input: textf.text ?? "0000", onSuccess: self.loginStatus)
+        }
+    }
+    
+    func loginStatus(state: Bool) {
+        if (state) {
+            let alert = UIAlertController(title: "Woot!", message: "Successfully Authenticated! Proceed to the dashboard!", preferredStyle: .alert)
+            
+            alert.addAction(UIAlertAction(title: "This is the best day of my life!", style: .default, handler: nil))
+            
+            self.present(alert, animated: true)
+        } else {
+            let alert = UIAlertController(title: ":(", message: "You failed to authenticate. Time to go cry yourself to sleep :'(", preferredStyle: .alert)
+            
+            alert.addAction(UIAlertAction(title: "This is the worst day of my life :'(", style: .default, handler: nil))
+            
+            self.present(alert, animated: true)
+        }
     }
     /*
     // MARK: - Navigation
