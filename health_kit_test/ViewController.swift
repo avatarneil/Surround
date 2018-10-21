@@ -20,6 +20,7 @@ class ViewController: UIViewController {
     var net = NetworkLayer()
     var lastDate: Date? = nil
     var sleepState = SleepState.asleep
+    var sleepStateTog = SleepState.awake
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -49,8 +50,25 @@ class ViewController: UIViewController {
         let timer = Timer.scheduledTimer(timeInterval: 5.0, target: self, selector: #selector(updateData), userInfo: nil, repeats: true)
     }
     
+    @IBOutlet weak var sleepLabel: UILabel!
+    
+    @IBAction func sleepToggle(_ sender: Any) {
+        toggleSleepState()
+        sleepLabel.text = sleepStateTog.rawValue
+    }
+    
     @objc func updateData() {
         retrieveSleepAnalysis()
+    }
+    
+    func toggleSleepState() {
+        if (sleepStateTog == .asleep) {
+            sleepStateTog = .awake
+            saveSleepAnalysis(category: HKCategoryValueSleepAnalysis.awake)
+        } else {
+            sleepStateTog = .asleep
+            saveSleepAnalysis(category: HKCategoryValueSleepAnalysis.asleep)
+        }
     }
     
     func retrieveSleepAnalysis() {
