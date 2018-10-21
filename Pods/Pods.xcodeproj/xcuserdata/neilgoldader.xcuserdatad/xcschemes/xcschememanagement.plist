@@ -11,21 +11,21 @@
 			<key>orderHint</key>
 			<integer>0</integer>
 		</dict>
-		<key>Pods-health_kit_test.xcscheme</key>
+		<key>Pods-Surround.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 			<key>orderHint</key>
 			<integer>1</integer>
 		</dict>
-		<key>Pods-health_kit_testTests.xcscheme</key>
+		<key>Pods-SurroundTests.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 			<key>orderHint</key>
 			<integer>2</integer>
 		</dict>
-		<key>Pods-health_kit_testUITests.xcscheme</key>
+		<key>Pods-SurroundUITests.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
